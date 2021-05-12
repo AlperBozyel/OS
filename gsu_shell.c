@@ -161,13 +161,13 @@ int main(int argc, char *argv[])
           /* TODO: If the child process exited normally
                          * store the return value of the child process into
                          * child_retval variable (See TP1) */
-          if (WIFSIGNALED(status))
+          if (WIFSIGNALED(child_retval))
           {
-            printf("Error:%d\n", WTERMSIG(status));
+            printf("Error:%d\n", WTERMSIG(child_retval));
           }
-          else if (WIFEXITED(status))
+          else if (WIFEXITED(child_retval))
           {
-            printf("Exited Normally and WEXITSTATUS:%d\n", WEXITSTATUS(status));
+            printf("Exited Normally and WEXITSTATUS:%d\n", WEXITSTATUS(child_retval));
           }
           break;
         } /* switch */
