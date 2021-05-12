@@ -154,7 +154,9 @@ int main(int argc, char *argv[])
 
           /* TODO: Wait for the forked child to complete. */
 
-          cpid = waitpid(child_pid, &status, 0);
+          while ((cpid = waitpid(child_pid, &status, 0)) > 0)
+          {
+          }
           child_retval = status;
           /* TODO: If the child process exited normally
                          * store the return value of the child process into
@@ -165,10 +167,8 @@ int main(int argc, char *argv[])
           }
           else if (WIFEXITED(status))
           {
-            printf("Exited Normally and x:%d\n ", WEXITSTATUS(status));
+            printf("Exited Normally and WEXITSTATUS:%d\n", WEXITSTATUS(status));
           }
-          exit(EXIT_SUCCESS);
-
           break;
         } /* switch */
       }   /* else */
