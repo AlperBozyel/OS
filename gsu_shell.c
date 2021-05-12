@@ -12,9 +12,6 @@
 #define VERSION "1.0"
 #define PROMPT ">"
 
-/* Number of processes has been done to determine should add new line when print prompt */
-int process_count = 0;
-
 int main(int argc, char *argv[])
 {
   /* The shell functions as an infinite loop
@@ -24,19 +21,11 @@ int main(int argc, char *argv[])
     int argc = 0;
     pid_t cpid;
     /* TODO: Print the prompty string using PROMPT constant */
-    if (process_count)
-    {
-      printf("\n%s", PROMPT);
-    }
-    else
-    {
-      printf("%s", PROMPT);
-    }
+    printf("%s", PROMPT);
 
     /* Read a line from terminal and tokenize it from spaces into
          * an array of strings. */
     char **argv = shell_process_line(&argc);
-    process_count++;
     /* If argv == NULL, the user just pressed Enter key without any
          * command. */
 
@@ -61,7 +50,7 @@ int main(int argc, char *argv[])
                  * Also, free the argv array using
                  * the relevant function from parser.c
                  * */
-        printf("GSU Shell Version: %s", VERSION);
+        printf("GSU Shell Version: %s\n", VERSION);
       }
 
       else if (strcmp(argv[0], "exit") == 0)
@@ -74,8 +63,9 @@ int main(int argc, char *argv[])
                  * You also have to free the argv array using
                  * the relevant function from parser.c before exiting.
                  */
+
+        printf("Returning back to the main shell that GSU Shell runs on...\n");
         return EXIT_SUCCESS;
-        printf("GSU Shell'i çalıştıran ana kabuga geri döndük");
       }
 
       /* If the typed command is not a built-in one (like exit or
@@ -96,7 +86,7 @@ int main(int argc, char *argv[])
         case -1:
           perror("fork");
           break;
-        case 0:;
+        case 0:
           /*****************/
           /* Child process */
           /*****************/
@@ -109,10 +99,7 @@ int main(int argc, char *argv[])
                          * you have argv  = {"ls", "-l", "--color", NULL}
                          * When you execvp(), make sure you pass the
                          * parameters correctly! */
-          char a[1000];
-          strcpy(a, argv[0]);
-          char *args[] = {a, a, NULL};
-          execvp("/usr/sbin", args);
+          execvp(argv[0], argv);
 
           /* TODO: If the code reaches here, it means that execvp()
                          * failed for some reason. Investigate errno
@@ -137,12 +124,12 @@ int main(int argc, char *argv[])
                          */
           if (errno == EACCES)
           {
-            printf("Persmission denied.");
+            printf("Persmission denied.\n");
             exit(126);
           }
           else if (errno == ENOENT)
           {
-            printf("The file does not exist.");
+            printf("The file does not exist.\n");
             exit(127);
           }
 
@@ -174,7 +161,7 @@ int main(int argc, char *argv[])
                          * child_retval variable (See TP1) */
           if (WIFSIGNALED(status))
           {
-            printf("Error:%d ", WTERMSIG(status));
+            printf("Error:%d\n", WTERMSIG(status));
           }
           else if (WIFEXITED(status))
           {
